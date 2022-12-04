@@ -31,3 +31,33 @@ Each score is written as `move_value + outcome_value`, for readability. That end
 ### Day 3
 
 In this problem, we're looking for overlap between lists of letters, and told that the overlap will be unique. That means that even if there's repetition in the lists, there *won't* be repetition of the overlapping item. So we can treat the lists as *sets* of letters, and use Python's `set` object to do all the heavy lifting for us. That's a powerful tool for a weak problem, but it makes the code short and sweet!
+
+### Day 4
+
+This is a classic Advent of Code-style problem! We're checking two ranges of integers for overlaps, call them $[a,b]$ and $[c,d]$.
+
+In Part 1, we're checking for complete containment, which we can visualize as follows.
+
+```
+      Case 1                Case 2
+      
+      [----]               [--]
+   [----------]    OR    [----------]
+   |  |    |  |          | |  |     |
+   a  c    d  b          c a  b     d
+```
+
+So we need to check $(a \le c \textrm{ and } d \le b)$ or $(c \le a \textrm{ and } b \le d)$. So just two cases!
+
+In Part 2, we're checking for any overlap at all, i.e. $[a,b]\cap[c,d] \ne \emptyset$. At first, it seems like there will be more cases, because the two intervals could overlap *or* one could be entirely contained within the other. But we actually don't care *how* the intervals overlap. After some consideration, we could come up with this visualization.
+
+```
+      Case 1                Case 2
+      
+       [--...                [--...
+   [----------]    OR    [----------]
+   |   |      |          |   |      |
+   a   c      b          c   a      d
+```
+
+One of the intervals will start earlier on the number line (or the same spot). So we only need to check whether or not the later interval *starts* inside the first one. Once we know that, it doesn't matter where the second interval ends because we already know that they overlap! So we again have two cases: $(a \le c \le b)$ or $(c \le a \le d)$.
