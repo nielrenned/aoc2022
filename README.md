@@ -61,3 +61,20 @@ In Part 2, we're checking for any overlap at all, i.e. $[a,b]\cap[c,d] \ne \empt
 ```
 
 One of the intervals will start earlier on the number line (or the same spot). So we only need to check whether or not the later interval *starts* inside the first one. Once we know that, it doesn't matter where the second interval ends because we already know that they overlap! So we again have two cases: $(a \le c \le b)$ or $(c \le a \le d)$.
+
+### Day 5
+
+Today was mostly a challenge of parsing a strangely formatted file, espcially the part detailing the initial stack of crates. The test input looks like this.
+
+```
+    [D]    
+[N] [C]    
+[Z] [M] [P]
+ 1   2   3 
+```
+
+All the crates have one-character names, so parsing this part isn't too bad. The crates names are every fourth character, starting at index 1. And the final line gives us the number of crates. So we can store all the crates as a `list` of characters from bottom to top.
+
+After that, parsing the instructions wasn't too bad. Something like this `"move 1 from 2 to 1"` could be split on the spaces, and then we can ignore the words `move`, `from`, and `to`. Python's `namedtuple` type was nice here to do print-debugging along the way, but not really necessary.
+
+After the instructions were parsed, we could use Python's `list` operations to do all the heavy lifting for us!
