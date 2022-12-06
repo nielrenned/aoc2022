@@ -12,19 +12,23 @@ def load_input(use_test_input=False):
 
 def parse_input():
     global INPUT
-    pass
+    INPUT = list(RAW_INPUT[:-1])
 
 def part1():
-    pass
+    for i in range(3, len(INPUT)):
+        if len(set(INPUT[i-3:i+1])) == 4:
+            return i+1
 
 def part2():
-    pass
+    for i in range(13, len(INPUT)):
+        if len(set(INPUT[i-13:i+1])) == 14:
+            return i+1
 
 def main():
     load_input()
     parse_input()
     print('PART 1:', part1())
-    # print('PART 2:', part2())
+    print('PART 2:', part2())
 
 if __name__ == "__main__":
     main()
