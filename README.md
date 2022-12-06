@@ -64,7 +64,7 @@ One of the intervals will start earlier on the number line (or the same spot). S
 
 ### Day 5
 
-Today was mostly a challenge of parsing a strangely formatted file, espcially the part detailing the initial stack of crates. The test input looks like this.
+This day was mostly a challenge of parsing a strangely formatted file, espcially the part detailing the initial stack of crates. The test input looks like this.
 
 ```
     [D]    
@@ -78,3 +78,7 @@ All the crates have one-character names, so parsing this part isn't too bad. The
 After that, parsing the instructions wasn't too bad. Something like this `"move 1 from 2 to 1"` could be split on the spaces, and then we can ignore the words `move`, `from`, and `to`. Python's `namedtuple` type was nice here to do print-debugging along the way, but not really necessary.
 
 After the instructions were parsed, we could use Python's `list` operations to do all the heavy lifting for us!
+
+### Day 6
+
+This puzzle was the quickest one yet. We can use the power of Python's `set` class again, since it "removes" duplicates. For each slice of length `n`, we can check `len(set(slice)) == n` to see if the slice contains `n` unique characters. Just like last time, this is sort of overkill for the job, but it makes the code short and sweet.
