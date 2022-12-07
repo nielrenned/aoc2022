@@ -105,7 +105,7 @@ Once we have this, parsing the output of `ls` is a simple matter of instantiatin
 Both parts of this problem are about the size of directories, so we need a way to calculate that. We can add a method to the directory class:
 
 ```py
-class Directory
+class Directory:
     def calculate_size(self):
         size = 0
         for child in self.children:
