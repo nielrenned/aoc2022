@@ -82,3 +82,38 @@ After the instructions were parsed, we could use Python's `list` operations to d
 ### Day 6
 
 This puzzle was the quickest one yet. We can use the power of Python's `set` class again, since it "removes" duplicates. For each slice of length `n`, we can check `len(set(slice)) == n` to see if the slice contains `n` unique characters. Just like last time, this is sort of overkill for the job, but it makes the code short and sweet.
+
+### Day 7
+
+This is another AoC classic: file structures! I like the idea of parsing someone's command line log a lot. We could use lists of lists here, and just be careful about what index corresponds to what, but that's not very readable or elegant. So we can use Python's object-oriented capabilities to create two new types: `File` and `Directory`. These classes aren't very complicated, but they do exactly what we need.
+
+```py
+class Directory:
+    def __init__(self, name: str = None, parent = None):
+        self.name = name
+        self.parent = parent
+        self.children = []
+
+class File:
+    def __init__(self, name: str = None, size: int = 0):
+        self.name = name
+        self.size = size
+```
+
+Once we have this, parsing the output of `ls` is a simple matter of instantiating the right classea at the right time. Since the file structure is used in both parts,  we do all of this at the parsing stage.
+
+Both parts of this problem are about the size of directories, so we need a way to calculate that. We can add a method to the directory class:
+
+```py
+class Directory
+    def calculate_size(self):
+        size = 0
+        for child in self.children:
+            if type(child) == File:
+                size += child.size
+            else:
+                size += child.calculate_size()
+        return size
+```
+
+Note that this method has no memoization, so calling it repeatedly is *not* efficient. But the input to this problem is small enough that it won't matter. Once we have this, parts 1 and 2 are very straightforward!
