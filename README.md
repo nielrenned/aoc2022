@@ -16,6 +16,8 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 
 There's not really much to talk about here. For Part 1, we can just keep track of the maximum calorie count seen so far. For Part 2, we could probably keep track of the top three only, but it works just as well to tally up all the calorie counts, sort the list, and add up the top three.
 
+---
+
 ### Day 2
 
 For this day, there is Rock-Paper-Scissors logic going on, which we *could* implement in code. But there are only 9 possible outcomes in each part, so instead of writing out all the logic, we can precompute (by hand) the values for each of the 9 possible outcomes, store them in a dictionary, and then use the inputs to index into the dictionary. This saves a lot of time and potential mistakes.
@@ -28,9 +30,13 @@ PART1_SCORES = {'A': {'X': 1 + 3, 'Y': 2 + 6, 'Z': 3 + 0},
 
 Each score is written as `move_value + outcome_value`, for readability. That ended up being a good decision, as I could easily make the edits for the new scores in Part 2.
 
+---
+
 ### Day 3
 
 In this problem, we're looking for overlap between lists of letters, and told that the overlap will be unique. That means that even if there's repetition in the lists, there *won't* be repetition of the overlapping item. So we can treat the lists as *sets* of letters, and use Python's `set` object to do all the heavy lifting for us. That's a powerful tool for a weak problem, but it makes the code short and sweet!
+
+---
 
 ### Day 4
 
@@ -62,6 +68,8 @@ In Part 2, we're checking for any overlap at all, i.e. $[a,b]\cap[c,d] \ne \empt
 
 One of the intervals will start earlier on the number line (or the same spot). So we only need to check whether or not the later interval *starts* inside the first one. Once we know that, it doesn't matter where the second interval ends because we already know that they overlap! So we again have two cases: $(a \le c \le b)$ or $(c \le a \le d)$.
 
+---
+
 ### Day 5
 
 This day was mostly a challenge of parsing a strangely formatted file, espcially the part detailing the initial stack of crates. The test input looks like this.
@@ -79,9 +87,13 @@ After that, parsing the instructions wasn't too bad. Something like this `"move 
 
 After the instructions were parsed, we could use Python's `list` operations to do all the heavy lifting for us!
 
+---
+
 ### Day 6
 
 This puzzle was the quickest one yet. We can use the power of Python's `set` class again, since it "removes" duplicates. For each slice of length `n`, we can check `len(set(slice)) == n` to see if the slice contains `n` unique characters. Just like last time, this is sort of overkill for the job, but it makes the code short and sweet.
+
+---
 
 ### Day 7
 
@@ -117,3 +129,56 @@ class Directory:
 ```
 
 Note that this method has no memoization, so calling it repeatedly is *not* efficient. But the input to this problem is small enough that it won't matter. Once we have this, parts 1 and 2 are very straightforward!
+
+---
+
+### Day 8
+
+> Without meaning to, I switched back to first-person singular here, rather than the mathematician-style "we" I'd been using before. I think I'll just stick with it, it makes the README more personal. :)
+
+This day was interesting! And I really like the theme. For Part 1, I wrote four `for` loops that checked the visibility in each direction. After some finagling, they were all correct, and the problem worked! But the code was rather ugly. In four different spots, I had something like the following.
+
+```py
+    tree_height = INPUT[y][x]
+    if tree_height > highest_seen:
+        visible[y][x] = True
+        highest_seen = tree_height
+```
+
+Code duplication within the same part of the problem is something I'm trying to avoid, so I decided to factor out this code into its own function, included below. This makes the solution much more readable. The only downside here is that this function has side-effects! In general, I like to avoid that type of thing, but I didn't want to spend too much more time refactoring. So I made a comment and moved onto part two! (Note that `INPUT` is a global, so we don't need to pass that in.)
+
+```py
+# Note: modifies the visible list
+def update_visible(x: int, y: int, highest_seen: int, visible: list):
+    tree_height = INPUT[y][x]
+    if tree_height > highest_seen:
+        visible[y][x] = True
+        highest_seen = tree_height
+    return highest_seen
+```
+
+In part two, I saw the potential for the same code duplication to happen, so I started with a function that could count visible trees in any direction (including diagonally, but we didn't need that here). No side-effects on this one!
+
+```py
+def count_visible(x0: int, y0: int, dx: int, dy: int):
+    width = len(INPUT[0])
+    height = len(INPUT)
+    starting_height = INPUT[y0][x0]
+
+    x, y = x0+dx, y0+dy
+    count = 0
+    while 0 <= x < width and 0 <= y < height:
+        if INPUT[y][x] < starting_height:
+            count += 1
+        if INPUT[y][x] >= starting_height: # We can also see the last tree!
+            count += 1
+            break
+        x += dx
+        y += dy
+    
+    return count
+```
+
+Then it was simply a matter of searching for the tree with the highest `scenic_score`!
+
+---
