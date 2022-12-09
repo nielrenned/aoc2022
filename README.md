@@ -182,3 +182,57 @@ def count_visible(x0: int, y0: int, dx: int, dy: int):
 Then it was simply a matter of searching for the tree with the highest `scenic_score`!
 
 ---
+
+### Day 9
+
+> I'm backtracking a little on the "we" thing from earlier. The mathematician in me can't help but write it when talking about problem solving. So I'll just mix-and-match. I think it reads pretty well still.
+
+This day was very reminiscent of SNAKE! I really liked the visuals of the rope.
+
+For part one, we just have a head and a tail to keep track of. The head moves only orthogonally, and we have to keep the tail next to the head, but "next to" includes diagonally. 
+
+First, I want to show a convenient trick that I like to use whenever there is movement like this. We could code up four `if` statements (one for each direction). But the bodies of each of those statements will probably be almost identical. So we can instead use a dictionary to do the heavy lifting:
+
+```py
+directions = {'R': (1, 0), 'L': (-1, 0), 'U': (0, 1), 'D': (0, -1)}
+```
+
+Then, when we want to know how much to move, we can write something like this!
+
+```py
+move_x, move_y = directions[dir]
+```
+
+Okay, so onto the logic for the tail. Let's let `dx` and `dy` represent how far the head and tail are from each other horizontally and vertically, respectively. At each step, we have five situations:
+
+- The head is next to the tail, i.e. `dx` and `dy` are both `<=1`. In this case the tail doesn't move.
+- The head is not next to the tail and moved horizontally, i.e. `dx == 2`.
+  - If `dy == 0`, the tail needs to move horizontally only.
+  - Otherwise, the tail needs to move horizontally and vertically.
+- The head is not next to the tail and moved vertically, i.e. `dy == 2`.
+  - If `dx == 0`, the tail needs to move vertically only.
+  - Otherwise, the tail needs to move horizontally and vertically.
+
+If we allow `dx` and `dy` to be negative, we can capture the direction of horizontal/vertical movement as well. Putting this all together, we get code that looks like this.
+
+```py
+dx, dy = head_x - tail_x, head_y - tail_y
+
+if abs(dx) == 2:
+    tail_x += dx//2
+    if abs(dy) == 1:
+        tail_y += dy
+
+if abs(dy) == 2:
+    tail_y += dy//2
+    if abs(dx) == 1:
+        tail_x += dx
+```
+
+And that works perfectly! The tail moves exactly where it's supposed to. When I initally did part one, I had this code chunk in my `part1()` function. But then part two has *nine* segments that all need to move that way, so I factored it out into its own function, `get_new_location(head, tail)`, and used that in both parts.
+
+The final step is to keep track of the unique tail locations, which we can do using a `set`. Then we just return the number of elements in the `set` and [job's done](https://www.youtube.com/watch?v=5r06heQ5HsI)!
+
+There's one other thing I want to mention here. When I worked through part one using the test case, I wrote a function that printed out the current state of the head and tail, matching the style on the website. I can't overstate how useful this was, as I could visually inspect and identify the steps where my code was going wrong. They even recommend doing that during part two of the problem. I would highly recommend it!
+
+---
