@@ -236,3 +236,11 @@ The final step is to keep track of the unique tail locations, which we can do us
 There's one other thing I want to mention here. When I worked through part one using the test case, I wrote a function that printed out the current state of the head and tail, matching the style on the website. I can't overstate how useful this was, as I could visually inspect and identify the steps where my code was going wrong. They even recommend doing that during part two of the problem. I would highly recommend it!
 
 ---
+
+### Day 10
+
+Yet another classic! Drawing characters with pixels on a screen *and* interpreting assembly-style code. I love these kind of puzzles, and I have no idea how they manage to make them work with randomized inputs. It's incredibly satisfying when you see the letters pop up in the terminal at the end.
+
+The actual coding here wasn't too challenging. It's rife with the potential for off-by-one errors, which I did run into, but other than that, it's just a matter of keeping track of the `X` register *during* every clock cycle. The number of cycles was short enough that we could just store them all in a list and refer back to it later. Since this chunk was common to both parts, I factored it out into a separate function. I don't really have much else to say about this one!
+
+---
