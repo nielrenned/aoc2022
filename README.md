@@ -244,3 +244,13 @@ Yet another classic! Drawing characters with pixels on a screen *and* interpreti
 The actual coding here wasn't too challenging. It's rife with the potential for off-by-one errors, which I did run into, but other than that, it's just a matter of keeping track of the `X` register *during* every clock cycle. The number of cycles was short enough that we could just store them all in a list and refer back to it later. Since this chunk was common to both parts, I factored it out into a separate function. I don't really have much else to say about this one!
 
 ---
+
+### Day 11
+
+These monkeys are annoying! The main challenge of part one was parsing the input file, but it wasn't too bad. I decided to make a `Monkey` class to contain all the information for each monkey so that the code was a little more readable. This ended up being a good decision, since I could also add a couple methods to perform the operations necessary, which cleaned up the code in solutions. After that, I just implemented the logic for part one and looped 20 times. No big deal.
+
+Part two threw me for a loop at the beginning. Ten thousand rounds instead of twenty and no longer dividing by three at each step makes the "worry values" explode! I did a check after 100 rounds and one of the values had easily over 100 digits. Python can handle arbitrarily large integers by default, but the operations do get slower and slower as the number of digits increases. So, as the puzzle says, we'll need to find another way to keep our worry levels manageable. 
+
+Here is where my math education helped me out a ton. The monkeys all do a divisibility test with distinct primes! So if we simply multiply all the moduli, and mod out by that number every step, all of our operations will work properly (since thankfully none of the monkeys do division, although that would be mostly okay too)! One thing tripped me up here though: the test file and the actual file have a different set of primes. I was so confused why the test case wasn't working after modding out by the product of primes, but once I noticed that, everything came out correct! For me (and I'm guessing others as well), the actual file uses the first eight primes, which have a product of 2\*3\*5\*7\*11\*13\*17\*19 = 9699690. This fits in 24 bits, so even squaring a number won't go over 64 bits, which means our operations don't rely on big ints, and we can fly through the calculations. Neat!
+
+---
