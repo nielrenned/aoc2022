@@ -23,6 +23,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 9](#day-9)
 - [Day 10](#day-10)
 - [Day 11](#day-11)
+- [Day 12](#day-12)
 
 ### Day 1
 
@@ -264,5 +265,11 @@ These monkeys are annoying! The main challenge of part one was parsing the input
 Part two threw me for a loop at the beginning. Ten thousand rounds instead of twenty and no longer dividing by three at each step makes the "worry values" explode! I did a check after 100 rounds and one of the values had easily over 100 digits. Python can handle arbitrarily large integers by default, but the operations do get slower and slower as the number of digits increases. So, as the puzzle says, we'll need to find another way to keep our worry levels manageable. 
 
 Here is where my math education helped me out a ton. The monkeys all do a divisibility test with distinct primes! So if we simply multiply all the moduli, and mod out by that number every step, all of our operations will work properly (since thankfully none of the monkeys do division, although that would be mostly okay too)! One thing tripped me up here though: the test file and the actual file have a different set of primes. I was so confused why the test case wasn't working after modding out by the product of primes, but once I noticed that, everything came out correct! For me (and I'm guessing others as well), the actual file uses the first eight primes, which have a product of 2\*3\*5\*7\*11\*13\*17\*19 = 9699690. This fits in 24 bits, so even squaring a number won't go over 64 bits, which means our operations don't rely on big ints, and we can fly through the calculations. Neat!
+
+---
+
+### Day 12
+
+Yet again, an advent classic! This time we're searching for a shortest path. Luckily, moving from place to place doesn't have a cost, so we can use a simple [BFS](https://en.wikipedia.org/wiki/Breadth-first_search) to find it. We need the BFS in both parts, so I ended up factoring it out once I had it written. We also probably could've used a library for this, something like [NetworkX](https://networkx.org/), but I've never used it before, so I didn't feel like learning it just for this problem. There's honestly not much else to say about today, it was short and sweet!
 
 ---
