@@ -24,6 +24,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 10](#day-10)
 - [Day 11](#day-11)
 - [Day 12](#day-12)
+- [Day 13](#day-13)
 
 ### Day 1
 
@@ -271,5 +272,24 @@ Here is where my math education helped me out a ton. The monkeys all do a divisi
 ### Day 12
 
 Yet again, an advent classic! This time we're searching for a shortest path. Luckily, moving from place to place doesn't have a cost, so we can use a simple [BFS](https://en.wikipedia.org/wiki/Breadth-first_search) to find it. We need the BFS in both parts, so I ended up factoring it out once I had it written. We also probably could've used a library for this, something like [NetworkX](https://networkx.org/), but I've never used it before, so I didn't feel like learning it just for this problem. There's honestly not much else to say about today, it was short and sweet!
+
+---
+
+### Day 13
+
+I really liked the way this problem was set up! Part 1 almost forces you to write a comparison function, and then Part 2 has you use it. That's good lesson planning.
+
+We can cheat a little bit in the parsing section of this problem. Python, like many scripting languages, has an `eval` function that lets you evaluate a string of code and returns the result. Since the file is formatted as valid Python code, `eval` does all the heavy lifting for us! Executing arbitrary code downloaded from the internet is dangerous though (although `eval` isn't as dangerous as `exec`), so I took a cursory glance through the file before doing this. Advent of Code is sort of a trusted source, so I didn't worry too much, but better safe than sorry!
+
+The comparison algorithm is recursive, so I made my `compare` function recursive as well. I think it reads pretty well! (Quick note here: I recently learned `if`-statements in Python could be one line. That's a boon for readability! I guess I just never tried it before.) I also decided to make an `enum` for the comparison results.
+
+```py
+class Order(IntEnum):
+    CORRECT = -1
+    INDETERMINATE = 0
+    INCORRECT = 1
+```
+
+I could've just returned an integer, but I think the `enum` helps with readability. This did cause me a problem later on, as in Python, the default `Enum` class isn't comparable to integers. But they also provide `IntEnum`, which solved that issue. The choices of values doesn't matter for part one, but in part two, these choices sort the list correctly.
 
 ---
