@@ -25,6 +25,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 11](#day-11)
 - [Day 12](#day-12)
 - [Day 13](#day-13)
+- [Day 14](#day-14)
 
 ### Day 1
 
@@ -291,5 +292,23 @@ class Order(IntEnum):
 ```
 
 I could've just returned an integer, but I think the `enum` helps with readability. This did cause me a problem later on, as in Python, the default `Enum` class isn't comparable to integers. But they also provide `IntEnum`, which solved that issue. The choices of values doesn't matter for part one, but in part two, these choices sort the list correctly.
+
+---
+
+### Day 14
+
+Today was great fun! A sort of physics simulation. While solving the problem, I wrote some code to visualize the sand falling, which helped me out a lot, and also entertained me. I actually ran into limitation of the terminal, interestingly enough. It doesn't have a high enough framerate.
+
+The code for today was honestly not that interesting. The logic for the sand isn't complicated, and we don't need to know about the empty cells, so we can use a Python `set` for points that are a wall, and another `set` for points that are sand that has stopped moving. With these sets, checking if a space is open is very quick, and the code is efficient enough for our purposes.
+
+Since the code wasn't really that interesting, I ([and apparently everyone else](https://www.reddit.com/r/adventofcode/comments/zlrjxg/2022_day_14_be_like/)) decided to make a visualization! I decided to only visualize part one, because part two ends up being tedious and boring towards the end. Here's the test case for part one.
+
+![Day 1 Test Visualization](images/day14_test1.gif)
+
+And here's my full input:
+
+![Day 1 Visualization](images/day14.gif)
+
+They're both quite satisfying to watch in my opinion. And the visualizations were fun to make! I think maybe they wanted to see what kind of visuals people would come up with on this problem. Overall very cool.
 
 ---
