@@ -26,6 +26,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 12](#day-12)
 - [Day 13](#day-13)
 - [Day 14](#day-14)
+- [Day 15](#day-15)
 
 ### Day 1
 
@@ -310,5 +311,35 @@ And here's my full input:
 ![Day 1 Visualization](images/day14.gif)
 
 They're both quite satisfying to watch in my opinion. And the visualizations were fun to make! I think maybe they wanted to see what kind of visuals people would come up with on this problem. Overall very cool.
+
+---
+
+### Day 15
+
+> Warning: I do some operation counting later in this write-up, but it's only an approximation. The operations may take different amounts of time. The idea is to give an estimate for the speedup, and provide some sort of measure of efficiency.
+
+Holy cow!!! Today was insane, puzzle-wise. Part one wasn't too bad, but I think I spent over 3 hours trying to get part two to finish in a reasonable amount of time. As someone on reddit pointed out, processor time is cheaper than programmer time, so I probably should've just set it running (with some sort of progress indicator), and gone about my day. But this puzzle really hooked me in! And my hard work paid off. I got the runtime down to around a second for both parts!
+
+Okay, so for part one, we're only checking one row. We can use some math to figure out exactly which $x$-values are ruled out by each sensor, keep track of just those $x$-values, and count them up at the end. The only issue is that we have to be sure to also subtract the actual beacons that are in that row. At first I used Python's `set` to do this, which worked fine, but a set of over 4 million elements is getting a little out of hand. So I decided to switch to using `portion`, which keeps track of intervals of real numbers, and can handle intersections, unions, etc. However, I don't think this made much of a difference? It seems like `portion` is quite slow actually. Regardless, part one computes fast enough, so I left the `portion` solution in there.
+
+Part two is *much* more interesting. Part one is a red herring! I initially tried to use a modified version of my solution to part one to check every single one of the 4 million rows. Which, while it would've worked just fine, took too long to finish. But each row can be checked independently, so we can parallelize! My computer has 6 physical cores with 12 virtual cores, so I tried something like this. (The `check_row` function works essentially like my solution to part one.)
+
+```py
+def part2():
+    with Pool(12, init, []) as p:
+        for result in p.imap_unordered(check_row, range(XY_BOUND+1), chunksize=1000):
+            if result != -1:
+                return result
+```
+
+While this was noticeably faster, it was still quite slow! On the order of 30 minutes or so. I did end up just letting it run until it found an answer, so that I could verify later solutions as well. For the record, this solution requires at most $4,000,000 \cdot \sum_{i=1}^{34}2d_i$ operations to complete, where $d_i$ is the distance from sensor $i$ to beacon $i$, which is absolutely massive. I've left this solution in a large comment for posterity's sake.
+
+At this point, I had done quite a few drawings, but I hadn't reached the important insight. In fact, I didn't reach it on my own, I wound up going to the subreddit for help, because I was totally lost. Anyway, here's the insight: By the nature of the puzzle, we're guaranteed that there is *exactly one* empty space on the map at the end. Because of this, we know the distress beacon must be touching the border of 4 sensor zones. So, we can consider all sets of four sensors and check points that are common to their borders. We can narrow this down even further, as the sets of four must be close enough to even share border points. This first part requires at most ${4 \choose 2 }\cdot{34 \choose 4} = 278,256$ operations.
+
+For each set of four sensors that are close enough, we need to find the border point that they all have in common, if there is one. At first, I implemented this naively: I just walked around the shortest border checking every point along the way. This was still faster than attempt one, but still quite slow (~5 minutes). Even the shortest borders have hundreds of thousand of points. So I went back to the drawing board (literally), and I gained one final insight: the borders are lines, and any shared points must occur where two perpendicular borders intersect! (If you don't believe me, try drawing some examples.)
+
+Since we have four sensors, we get sixteen border lines (8 with slope 1 and 8 with slope -1). We can calculate the intersection of each of the 64 pairs of perpendicular lines, and consider only those points! We can also throw some of them away pretty early, as they're either not in bounds or don't have integer entries.  Then, at the end, for each point we find from the earlier step, we just need to check that it can't be seen by *any* sensor. Once we find one, that's the distress beacon! This was the insight that finally led to the code running in under a second. Phew.
+
+This was the first problem this year that seriously stumped me. I wish I had figured out the first insight on my own, but I'm okay with it. I'm very happy that I got the code to run as quickly as I did though (and honestly that I finished the problem at all).
 
 ---
