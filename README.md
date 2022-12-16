@@ -27,6 +27,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 13](#day-13)
 - [Day 14](#day-14)
 - [Day 15](#day-15)
+- [Day 16](#day-16)
 
 ### Day 1
 
@@ -341,5 +342,19 @@ For each set of four sensors that are close enough, we need to find the border p
 Since we have four sensors, we get sixteen border lines (8 with slope 1 and 8 with slope -1). We can calculate the intersection of each of the 64 pairs of perpendicular lines, and consider only those points! We can also throw some of them away pretty early, as they're either not in bounds or don't have integer entries.  Then, at the end, for each point we find from the earlier step, we just need to check that it can't be seen by *any* sensor. Once we find one, that's the distress beacon! This was the insight that finally led to the code running in under a second. Phew.
 
 This was the first problem this year that seriously stumped me. I wish I had figured out the first insight on my own, but I'm okay with it. I'm very happy that I got the code to run as quickly as I did though (and honestly that I finished the problem at all).
+
+---
+
+### Day 16
+
+Another computationally difficult problem! Part one wasn't too bad actually. I decided to take advantage of `NetworkX` this time, and used it to find path lengths at the start. This saved me a decent amount of time, as I could focus on the main part of the algorithm. Now, we could just search all possible path orderings and see which one released the most pressure (and in fact, for part one, this works fine), but I decided that doing some pruning would be a good idea. 
+
+We can prune in a very naive way and still get huge payoff! Throughout, we keep track of the most pressure we've released so far, including pressure released in the future. That is, if we open valve `DD` at minute two like in the example, we count that as releasing `28*20 = 560` pressure. Then we can check if we should prune in the following way: it takes 2 minutes to move one space and open one valve. We suppose we open the valves as fast as possible in the most optimal order. If that still doesn't get us to more pressure released than the best we've seen so far, then we can prune that node. This ended up giving a *NINETY-SIX* percent speedup for part one. So that's neat! After that we simply BFS with pruning and see what we get. Not too bad for part one. On the other hand...
+
+I went through the ringer on part two, holy moly. I spent multiple hours trying to write a movement algorithm for two people that was efficient and had good pruning. The movement logic is complicated if you try to write it for both people simultaneously. I got it to run quickly eventually, but then got the same wrong answer three times in a row! This was very frustrating. On top of that, the code I was writing was incredibly ugly. Like I'm talking absolute bonkers to read. I was altogether very frustrated and also missing the correct answer.
+
+And then, I had a breakthrough that I should've had way earlier: since the person and the elephant will never open the same valve (they're trying to be efficient!), they actually both seek out two disjoint sets of valves. So instead of solving the problem for two people simultaneously, we really just need to solve the problem for each person on disjoint subsets of the set of useful valves! And calculating two disjoint subsets isn't too bad. If our set has $n$ elements, we can consider the binary representation of all integers in $[0, 2^n - 1]$. The 1s and 0s tell us which elements go in which set, and we also know that there are exactly $2^n$ pairs of disjoint subsets (which in hindsight makes perfect sense, as that's also the size of the power set). 
+
+Since I was able to get part one to run pretty efficiently, part two finishes in a reasonable amount of time: about four minutes on my computer. Just enough time to teach the elephant to open valves. (I'm realizing as I write this and browse the subreddit that I could cache the results for each subset and then total up the time afterward. And also we could use `multiprocessing`. Ah well, the code reads nicely as it is.) Whew. The last two days have been absolute doozies. Hopefully tomorrow I can reach the insight earlier.
 
 ---
