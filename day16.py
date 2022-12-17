@@ -96,16 +96,17 @@ def part2():
 
     max_pressure = 0
 
-    for n in range(0, 2**len(nonzero_valves)):
-        my_valves = set()
-        elephant_valves = set()
+    pressures = dict()
+    for n in tqdm(range(0, 2**len(nonzero_valves))):
+        valves = set()
         for i in range(len(nonzero_valves)):
             if (n & (1 << i)) > 0:
-                my_valves.add(nonzero_valves[i])
-            else:
-                elephant_valves.add(nonzero_valves[i])
-        total_pressure = solve_for_one_runner(my_valves, 26) + solve_for_one_runner(elephant_valves, 26)
-        max_pressure = max(total_pressure, max_pressure)
+                valves.add(nonzero_valves[i])
+        pressures[n] = solve_for_one_runner(valves, 26)
+    
+    for n in range(0, 2**len(nonzero_valves)):
+        m = 2**len(nonzero_valves) - 1 - n
+        max_pressure = max(pressures[n] + pressures[m], max_pressure)
     
     return max_pressure
 
