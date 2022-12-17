@@ -28,6 +28,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 14](#day-14)
 - [Day 15](#day-15)
 - [Day 16](#day-16)
+- [Day 17](#day-17)
 
 ### Day 1
 
@@ -358,5 +359,41 @@ And then, I had a breakthrough that I should've had way earlier: since the perso
 Since I was able to get part one to run pretty efficiently, part two finishes in a reasonable amount of time: about four minutes on my computer. Just enough time to teach the elephant to open valves. ~~(I'm realizing as I write this and browse the subreddit that I could cache the results for each subset and then total up the time afterward. And also we could use `multiprocessing`. Ah well, the code reads nicely as it is.)~~ Whew. The last two days have been absolute doozies. Hopefully tomorrow I can reach the insight earlier.
 
 I relented and went back and added the caching! It got just over a 2x speedup, and now part two runs in under two minutes. I think I'm finally satisfied. Calling it here.
+
+---
+
+### Day 17
+
+This problem was pretty neat! Kind of tetris-esque. For part one, I had a good time matching their visualization of what was happening, which helped me debug the issues in my simulation very quickly. As always with these problems, visualizing things (programatically or otherwise) seems to help a lot. The actual simulation part was pretty straightforward! Just following the logic laid out in the problem. I don't really have much to say about part one.
+
+Part two almost threw me for a loop! A *trillion* simulations? That's way too many to actually do (I don't have enough RAM for one). My first idea was to keep track of the maximum height in each column, and use that to run the simulation. That would solve the memory issue, but I think it wouldn't get the right answer and would still take at least a few days to run. So I spent some more time thinking and realized: there must be a point at which the tower repeats! There are only finitely many combinations of rock and starting jet, so they must line up eventually. After verifying that that was the case, I came up with this visualization:
+
+```
+  +-+
+  |  \     <- final stack
+  +---+
+  +---+
+  |   |    <- repeating chunk
+  |   |
+  +---+
+    .
+    .
+    .
+  +---+
+  |   |    <- repeating chunk
+  |   |
+  +---+
+  +---+
+  |   |    <- repeating chunk
+  |   |    
+  +---+
+    +--+
+   /   |   <- initial stack
+  +----+
+```
+
+So if we can calculate the height of each of the three types of chunks, we can calculate the total height without having to do a trillion simulations. Since there are finitely many combinations of rocks and starting jets, we can keep track of which ones we've seen and wait for a repeat. Then a little bit of math gives us the answer! I coded it up, ran it, and it worked for the test case... and then failed for the actual problem. Huh?
+
+I spent some time walking through the output of the code to see if I could spot anything wrong with it, and eventually figured out that it was incorrectly identifying where the border between repeating chunks was. We also need to know the state of the top of the chamber to figure out where the repetition is, since we could have a repeat rock and starting jet with a different chamber state and we *wouldn't* get a repetition. So I also added the top layer of the chamber as part of the repetition key and this got the correct answer. Interestingly, I don't think that's strictly correct? Because maybe the top two or three or four layers of the chamber need to be the same. I think, technically, we need to search for repetition in a more rigorous way. But it ended up getting me the right answer and I don't feel like rewriting everything, so I won't. I'm just glad I had the insight for today earlier than Days 15 and 16.
 
 ---
