@@ -29,6 +29,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 15](#day-15)
 - [Day 16](#day-16)
 - [Day 17](#day-17)
+- [Day 18](#day-18)
 
 ### Day 1
 
@@ -395,5 +396,22 @@ Part two almost threw me for a loop! A *trillion* simulations? That's way too ma
 So if we can calculate the height of each of the three types of chunks, we can calculate the total height without having to do a trillion simulations. Since there are finitely many combinations of rocks and starting jets, we can keep track of which ones we've seen and wait for a repeat. Then a little bit of math gives us the answer! I coded it up, ran it, and it worked for the test case... and then failed for the actual problem. Huh?
 
 I spent some time walking through the output of the code to see if I could spot anything wrong with it, and eventually figured out that it was incorrectly identifying where the border between repeating chunks was. We also need to know the state of the top of the chamber to figure out where the repetition is, since we could have a repeat rock and starting jet with a different chamber state and we *wouldn't* get a repetition. So I also added the top layer of the chamber as part of the repetition key and this got the correct answer. Interestingly, I don't think that's strictly correct? Because maybe the top two or three or four layers of the chamber need to be the same. I think, technically, we need to search for repetition in a more rigorous way. But it ended up getting me the right answer and I don't feel like rewriting everything, so I won't. I'm just glad I had the insight for today earlier than Days 15 and 16.
+
+---
+
+### Day 18
+
+Whew, back to something a little bit easier! Days 15, 16, and 17 were all very hard for me, so this day felt like a breath of fresh air. I like picture that formed in my head of the voxel ball of lava. Very MineCraft-esque.
+
+For part one, we can go through all the cubes and see if any of their orthogonally adjacent spaces are open. If they are, we add each face to the total. Again, Python's `set` is doing the hard work for us, as checking if an element is in a set is an $O(1)$ operation. This ended up just being a simple counting problem. I did write a small helper to generate all the orthogonally adjacent locations. I use this "trick" of making an array of deltas a lot, since it makes the code read so much better. I think it's somewhat inefficient to declare the `directions` list in the function because of memory allocation, but for a small problem like this, it doesn't matter.
+
+```py
+def adjacent_locations(cube_loc):
+    directions = [(1,0,0), (-1,0,0), (0,1,0), (0,-1,0), (0,0,1), (0,0,-1)]
+    for dx, dy, dz in directions:
+        yield (cube_loc[0] + dx, cube_loc[1] + dy, cube_loc[2] + dz)
+```
+
+For part two, the problem gets a little bit harder. I imagined it kind of like the fill tool in a paint program, except in 3D. We can first calculate the bounding box of the lava, and then expand by 1 unit in every direction. Then within this expanded box, we need to start at a corner and "fill" from there to find all the surrounding air (we can re-use the function above to help). Along the way, if one voxel of air is touching a voxel of lava, we count that as an exposed face. This worked great! Short and sweet problem today.
 
 ---
