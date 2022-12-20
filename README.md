@@ -30,6 +30,8 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 16](#day-16)
 - [Day 17](#day-17)
 - [Day 18](#day-18)
+- [Day 19](#day-19)
+- [Day 20](#day-20)
 
 ### Day 1
 
@@ -413,5 +415,21 @@ def adjacent_locations(cube_loc):
 ```
 
 For part two, the problem gets a little bit harder. I imagined it kind of like the fill tool in a paint program, except in 3D. We can first calculate the bounding box of the lava, and then expand by 1 unit in every direction. Then within this expanded box, we need to start at a corner and "fill" from there to find all the surrounding air (we can re-use the function above to help). Along the way, if one voxel of air is touching a voxel of lava, we count that as an exposed face. This worked great! Short and sweet problem today.
+
+---
+
+### Day 19
+
+Still working on this one! I think my algorithm is correct, it's just absurdly slow.
+
+---
+
+### Day 20
+
+Another easier day, finally! This problem has a little weirdness in that we need to know the order the numbers *started in* the whole time. On my first attempt, I decided to use a `list` of `tuples` of the form `(move_order, shift_amount)`. Then we can use the `move_order` to figure out which data point is next and the `shift_amount` to move it around. At first I thought that we had to keep the front of the list the same as the example, but the starting point is always wherever zero is and the list is considered "circular," so the operations are simple swaps (yay Python one-liners).
+
+This approach works just fine, but it's a little slow, and part two seems partially designed to punish a slow part one. In my mind the potential bottlenecks were `list` operations: searching and splicing. My algorithms class popped into my head and I thought, "Y'know, a doubly-linked list would be perfect for this!" But Python doesn't even have pointers, how do we do a linked list?? So I Googled. The answer is a [`deque`](https://docs.python.org/3/library/collections.html#collections.deque)! So instead of a list, I used a `deque` of `tuples` with the same format. I think (theoretically at least) searching is still a little slow, but using a `dict` to keep track of the move order, `deque.index` works fast enough.
+
+The other curveball from part two is that we're supposed to multiply the shift amounts by `811589153`! If we stuck with the swapping routine, this would be absurdly slow. But luckily, we can make another optimization. These so-called "shifts" are really a removal and a reinsertion. When you remove the element, the new list becomes 1 element shorter (great insight there, I know), and so we can mod the shift amount by the original length minus one to get our insertion index.
 
 ---
