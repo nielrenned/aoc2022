@@ -32,6 +32,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 18](#day-18)
 - [Day 19](#day-19)
 - [Day 20](#day-20)
+- [Day 21](#day-21)
 
 ### Day 1
 
@@ -431,5 +432,17 @@ Another easier day, finally! This problem has a little weirdness in that we need
 This approach works just fine, but it's a little slow, and part two seems partially designed to punish a slow part one. In my mind the potential bottlenecks were `list` operations: searching and splicing. My algorithms class popped into my head and I thought, "Y'know, a doubly-linked list would be perfect for this!" But Python doesn't even have pointers, how do we do a linked list?? So I Googled. The answer is a [`deque`](https://docs.python.org/3/library/collections.html#collections.deque)! So instead of a list, I used a `deque` of `tuples` with the same format. I think (theoretically at least) searching is still a little slow, but using a `dict` to keep track of the move order, `deque.index` works fast enough.
 
 The other curveball from part two is that we're supposed to multiply the shift amounts by `811589153`! If we stuck with the swapping routine, this would be absurdly slow. But luckily, we can make another optimization. These so-called "shifts" are really a removal and a reinsertion. When you remove the element, the new list becomes 1 element shorter (great insight there, I know), and so we can mod the shift amount by the original length minus one to get our insertion index.
+
+---
+
+### Day 21
+
+Oh no! The monkeys are back! The creativity in all these puzzle stories is so fun. Part one was straightforward today: repeatedly loop through the monkeys, reducing the expression where possible, until all monkeys are integers. Since the final answer is supposed to be an integer, I made the assumption here that any division would not have a remainder, which seems to be true for my input (and the test input). It would be an easy change to make to handle non-integers, but seems unnecessary.
+
+Part two required a little bit more thinking. At first I was considering a sort-of [RPN](https://en.wikipedia.org/wiki/Reverse_Polish_notation) calculator thing, but I couldn't see exactly how to make that work with the unknown `humn` variable. After that, I thought I could do a Lisp-esque interpreter, but that seemed like overkill. I spent some time mulling and decided that the final equation had to be of the form $ax+b=cx+d$, since we want exactly one answer and we're only going to end up with rational functions. While this is not strictly true (e.g. $x^2 + 2x + 4 = 0$ also only has one root), it seemed like a fair assumption.
+
+With this in mind, I created a simple class to handle the arithmetic called `LinearExpression`. It represents `ax+b` where `a` and `b` are both of type [`Fraction`](https://docs.python.org/3/library/fractions.html). At the start, I converted all the integer values to `LinearExpression` and then used operator overloading to define the four operations. To verify my assumptions, I added checks in the operations to make sure the answers always stayed as `LinearExpression`s as well (which ended up working well). I accidentally implemented division backwards at one point, which gave me a little trouble, but once I fixed that, everything worked out nicely! The code for part two is almost identical to part one as well, which is nice. (Now that I'm thinking about that, we could even potentially factor out the code to reduce all the expressions! I'll leave it for now, but that would make for some nice readability.) 
+
+Overall I really enjoyed this problem! And as always, the convenience of Python helped me a lot.
 
 ---
