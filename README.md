@@ -33,6 +33,8 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 19](#day-19)
 - [Day 20](#day-20)
 - [Day 21](#day-21)
+- [Day 22](#day-22)
+- [Day 23](#day-23)
 
 ### Day 1
 
@@ -444,5 +446,19 @@ Part two required a little bit more thinking. At first I was considering a sort-
 With this in mind, I created a simple class to handle the arithmetic called `LinearExpression`. It represents `ax+b` where `a` and `b` are both of type [`Fraction`](https://docs.python.org/3/library/fractions.html). At the start, I converted all the integer values to `LinearExpression` and then used operator overloading to define the four operations. To verify my assumptions, I added checks in the operations to make sure the answers always stayed as `LinearExpression`s as well (which ended up working well). I accidentally implemented division backwards at one point, which gave me a little trouble, but once I fixed that, everything worked out nicely! The code for part two is almost identical to part one as well, which is nice. (Now that I'm thinking about that, we could even potentially factor out the code to reduce all the expressions! I'll leave it for now, but that would make for some nice readability.) 
 
 Overall I really enjoyed this problem! And as always, the convenience of Python helped me a lot.
+
+---
+
+### Day 22
+
+Still working on this one too! I think I've basically got it, just a few kinks to work out.
+
+---
+
+### Day 23
+
+Today some of my previous Advent of Code experience helped me out! It appears that the elves are trying to spread out on an infinitely large plane, so the map is going to get larger and larger. But locations are either empty or have an elf in them, and there's only finitely many elves. So we can keep track of *only* the elves' locations in a `set` and use that to do all our checks. That has two benefits: fixed memory cost *and* it actually simplifies the code a little bit, since we don't have to worry about expanding the map if need-be.
+
+This foresight made part two of the problem very straightforward. I factored out the movement code and added two lines to keep track of the number of elves that actually moved. The logic for today was pretty straightforward as well, so it was short and sweet (and fun of course!).
 
 ---
