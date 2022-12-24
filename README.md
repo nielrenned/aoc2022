@@ -35,6 +35,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 21](#day-21)
 - [Day 22](#day-22)
 - [Day 23](#day-23)
+- [Day 24](#day-24)
 
 ### Day 1
 
@@ -460,5 +461,13 @@ Still working on this one too! I think I've basically got it, just a few kinks t
 Today some of my previous Advent of Code experience helped me out! It appears that the elves are trying to spread out on an infinitely large plane, so the map is going to get larger and larger. But locations are either empty or have an elf in them, and there's only finitely many elves. So we can keep track of *only* the elves' locations in a `set` and use that to do all our checks. That has two benefits: fixed memory cost *and* it actually simplifies the code a little bit, since we don't have to worry about expanding the map if need-be.
 
 This foresight made part two of the problem very straightforward. I factored out the movement code and added two lines to keep track of the number of elves that actually moved. The logic for today was pretty straightforward as well, so it was short and sweet (and fun of course!).
+
+---
+
+### Day 24
+
+Gosh, so many [BFS](https://en.wikipedia.org/wiki/Breadth-first_search)-style problems this year! This one was super interesting because the movement restrictions changed every time step. The nice thing though was that they cycled, so we could precalculate all the cycles and then use those precalculated maps to search for open positions. In hindsight, I don't think the cycling was *that* important, but the precalculation was definitely a good call. It made the code faster to run and easier to write.
+
+Other than that, the code is really a standard BFS, which I ended up factoring out for part two. There weren't any huge hurdles, but it was still a fun problem. Merry Christmas Eve!
 
 ---
