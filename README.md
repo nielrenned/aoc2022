@@ -475,3 +475,9 @@ Other than that, the code is really a standard BFS, which I ended up factoring o
 ### Day 25
 
 As usual, a somewhat more straightforward problem on Christmas Day. And only one part! At the time of writing I still haven't finished Day 19 or Day 22, but I plan to do them soon.
+
+I believe the numeral system in this problem should be called "balanced quinary." I've heard of [balanced ternary](https://en.wikipedia.org/wiki/Balanced_ternary) before, so it makes sense that this could be expanded to a larger base. This problem *is* technically one part, but there are two different pieces to that part. We need to convert from balanced quinary to Python integers *and back*. Converting to Python integers is straightforward: multiply each digit's value by its place value and sum.
+
+Converting back is more difficult. After pondering this for a while, I decided to first convert to normal quinary representation and then convert from there to balanced quinary. We can see this idea using an example. Consider $39_{10} = 124_5$. Working through the quinary digits backwards, we first run into $4$ in the 1s place, which *is not* a balanced-quinary digit. But, if we subtract $5$, we get $-1$, which *is* a balanced quinary digit. We do need to add that 5 back somewhere else and he next digit is the 5s place, so we add can add 1 to that digit! Our new representation becomes $39_{10} = 13\bar{1}_5$ (where $\bar{1} = -1$). Then we move up one place to the $3$, which again, isn't a balanced-quinary digit. So we do the same process and et $39_{10} = 2\bar{2}\bar{1}_5$. Finally, the 25s digit is $2$, which is a balanced-quinary digit, so we're done!
+
+I have a feeling there's a faster way to do this conversion, but the above algorithm works and is fast enough! Merry Christmas!
