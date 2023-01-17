@@ -471,3 +471,7 @@ Gosh, so many [BFS](https://en.wikipedia.org/wiki/Breadth-first_search)-style pr
 Other than that, the code is really a standard BFS, which I ended up factoring out for part two. There weren't any huge hurdles, but it was still a fun problem. Merry Christmas Eve!
 
 ---
+
+### Day 25
+
+As usual, a somewhat more straightforward problem on Christmas Day. And only one part! At the time of writing I still haven't finished Day 19 or Day 22, but I plan to do them soon.
