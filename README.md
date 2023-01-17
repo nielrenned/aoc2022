@@ -36,6 +36,7 @@ In a lot of problems, code can be shared between Parts 1 and 2, but there's no w
 - [Day 22](#day-22)
 - [Day 23](#day-23)
 - [Day 24](#day-24)
+- [Day 25](#day-25)
 
 ### Day 1
 
@@ -452,7 +453,28 @@ Overall I really enjoyed this problem! And as always, the convenience of Python 
 
 ### Day 22
 
-Still working on this one too! I think I've basically got it, just a few kinks to work out.
+~~Still working on this one too! I think I've basically got it, just a few kinks to work out.~~
+
+Whew! This one got me really stuck, and I actually ended up giving up on it for a while. When I came back to finish it, it still gave me a lot of trouble! Part one was, as usual, decently straightfoward. Walk around the map according to the instructions and figure out where you end up. However...
+
+In part two, you "realize" the map has to be folded into a cube. The map is a [cube net](https://en.wikipedia.org/wiki/Cube#Geometric_relations), and there are *eleven* different ones! Then, when you count rotations and reflections, there 56 different possible maps you could get. I don't know of a general "this is how you turn a net into a cube" algorithm, so I decided to just solve my specific case for part two. By the way, with these numbers in mind, I have to imagine that testing this puzzle was incredibly tedious.
+
+The main question to answer here is "how do the edges glue together?" I ended up labeling the pieces of my cube net as follows.
+```
+  2 1
+  3
+5 4
+6 
+```
+Then, after staring at this for a while and struggling to get my 3-dimensional reasoning working, I made a physical representation and actually folded it into a cube.
+
+![Day 22 Cube](images/day22_cube.png)
+
+This helped immensely. I would highly recommend doing this if you try to solve this problem. Once I had this model, I filled in the details in my code, wrote a couple functions to calculate how to cross the edges, ran the code, and... I got the wrong answer. I spent some time print-debugging (literally watching the little arrow zoom around the map) and couldn't figure it out. This was the point where I gave up initially. Everything *seemed* to be working correctly, but I was still getting the wrong answer.
+
+When I came back to the problem, I decided to be a little bit more rigorous about my testing and I finally figured it out. So, my algorithm for jumping edges assigned the edge of each face a starting- and ending-point in a systematic way: if the edge was horizontal on the map, start was the left point and end was the right; otherwise, start was the top point and end was the bottom. Then it did some math with these line segments to figure out where the correct location was. But, when folding these nets, it's possible to end up with edges glued in *opposite orientations*, which I wasn't taking into account. After adding this into the algorithm, everything worked just fine.
+
+I'm not sure what the moral is here, but __wow__ this problem was difficult for me. I'm glad I ended up coming back and solving it though. It feels good to nab that win.
 
 ---
 
