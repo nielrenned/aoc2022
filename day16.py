@@ -1,6 +1,5 @@
 import networkx as nx
 from queue import SimpleQueue
-from tqdm import tqdm
 
 DAY = 16
 RAW_INPUT = None
@@ -97,7 +96,7 @@ def part2():
     max_pressure = 0
 
     pressures = dict()
-    for n in tqdm(range(0, 2**len(nonzero_valves))):
+    for n in range(0, 2**len(nonzero_valves)):
         valves = set()
         for i in range(len(nonzero_valves)):
             if (n & (1 << i)) > 0:
