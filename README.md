@@ -425,7 +425,19 @@ For part two, the problem gets a little bit harder. I imagined it kind of like t
 
 ### Day 19
 
-Still working on this one! I think my algorithm is correct, it's just absurdly slow.
+~~Still working on this one! I think my algorithm is correct, it's just absurdly slow.~~
+
+Holy cow, this one really stumped me. It took me multiple attempts to get anything close to the right answer. Turns out, my note above was right: my algorithm *was* correct! So that's a good sign. 
+
+Again, this is a BFS-style problem (like a lot of the others), but the transition from state-to-state is slightly complicated. At first I was modeling everything with length-4 tuples all over the place, but this got really messy and nigh-unreadable. So I decided to make a `Factory` class that contained a lot of the logic. (This is not a factory in the sense of code-patterns, but in the universe of AoC.) This helped immensely with the readability of the main loop, and I think actually ended up speeding up the code a little bit, since we were allocating objects a lot less often.
+
+Then I spent many, *many* hours trying to optimize this search. At one point, I changed it to a `PriorityQueue` and added a heuristic... which failed miserably. It made the code slower *and* output the wrong answer. There are two optimizations which reduce the search space though. Firstly, only one robot can be built each minute. So we shouldn't build robots of one type than we'd need each minute. For example, in Blueprint 1 of the example, each robot costs at most 4 ore, so we shouldn't build more than 4 ore-mining robots. This optimization is captured in the `Factory::should_build_robot` method. Secondly, if we optimistically assume that we can build one geode robot *every minute* and that still won't get us to highest amount of geodes seen so far, it's useless to keep going down that path. This optimization is capture in the `while` loop in a few lines.
+
+I figured out the second optimization on my own, but the first one came from reddit. After I spent so many hours on this problem, I gave up and went looking for help. Reddit also gave me the final boost, a huge time-saver that I'm almost ashamed to have not figured out on my own: time jumping. Instead of re-queueing each `Factory` after every minute passes, we can calculate how much time is needed to build the next robot, and queue only those states. This saves on memory and computation time, and is the change that ended up bringing my solve time down to a reasonable amount.
+
+For a while I was considering rewriting my solution in C++, but I'm glad it didn't come to that.
+
+So yeah, ultimately, I needed a lot of help on this one and I'm totally okay with that! I know that I'm not always going to see the solution or obvious optimizations. This was the very last problem I solved, and I'm happy to be done!
 
 ---
 
